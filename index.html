@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Participe do sorteio · Instituto Dra. Thaís Machado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cafe:#4a2e24; --caramelo:#9a5a2a; --mel:#c98a4b;
+    --creme:#f8f3ee; --areia:#efe5da; --linha:#e2d4c5; --branco:#fffdfb;
+    --texto:#3a2a22; --suave:#7d6a5e; --erro:#b3402a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    background:var(--creme); color:var(--texto);
+    font-family:'Manrope',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center;
+    padding:28px 16px 32px;
+    background-image:radial-gradient(circle at 50% -10%, #fff 0, transparent 60%);
+  }
+  .logo{width:min(220px,62vw);height:auto;display:block;margin:8px auto 22px}
+  .card{
+    width:100%; max-width:440px; background:var(--branco);
+    border:1px solid var(--linha); border-radius:22px; padding:28px 22px 24px;
+    box-shadow:0 20px 50px -30px rgba(74,46,36,.35);
+  }
+  .tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--caramelo);background:var(--areia);border-radius:99px;padding:7px 12px;
+  }
+  .tag i{width:7px;height:7px;border-radius:50%;background:#d0452e;box-shadow:0 0 0 0 rgba(208,69,46,.6);animation:pulso 1.6s infinite}
+  @keyframes pulso{70%{box-shadow:0 0 0 8px rgba(208,69,46,0)}100%{box-shadow:0 0 0 0 rgba(208,69,46,0)}}
+  h1{
+    font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--cafe);
+    font-size:clamp(30px,8.5vw,38px);line-height:1.05;margin:14px 0 8px;letter-spacing:-.01em;
+  }
+  .sub{color:var(--suave);font-size:15px;line-height:1.5;margin-bottom:22px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--cafe);margin:0 0 7px}
+  .campo{margin-bottom:16px}
+  input{
+    width:100%;font:inherit;font-size:17px;color:var(--texto);
+    background:var(--creme);border:1.5px solid var(--linha);border-radius:14px;
+    padding:15px 16px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
+    -webkit-appearance:none;
+  }
+  input::placeholder{color:#b3a395}
+  input:focus{border-color:var(--caramelo);background:#fff;box-shadow:0 0 0 4px rgba(154,90,42,.12)}
+  input.invalido{border-color:var(--erro)}
+  .msg{min-height:20px;font-size:13.5px;color:var(--erro);margin:2px 0 10px}
+  button{
+    width:100%;font:inherit;font-size:17px;font-weight:700;letter-spacing:.01em;
+    color:#fff;background:linear-gradient(135deg,var(--cafe),#6a3d27);
+    border:0;border-radius:14px;padding:17px;cursor:pointer;
+    box-shadow:0 12px 24px -12px rgba(74,46,36,.7);transition:transform .15s,opacity .2s;
+    touch-action:manipulation;
+  }
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.6;cursor:wait}
+  .lgpd{font-size:12px;color:var(--suave);line-height:1.45;text-align:center;margin-top:14px}
+  .estado{text-align:center;padding:10px 4px 6px}
+  .estado .icone{width:78px;height:78px;margin:4px auto 16px;border-radius:50%;display:grid;place-items:center;background:var(--areia)}
+  .estado h2{font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--cafe);font-size:32px;line-height:1.1;margin-bottom:10px}
+  .estado p{color:var(--suave);font-size:15.5px;line-height:1.55}
+  .estado strong{color:var(--cafe)}
+  .oculto{display:none!important}
+  .rodape{margin-top:auto;padding-top:26px;font-size:12px;color:#a89586;text-align:center}
+  .carregando{display:flex;justify-content:center;padding:40px 0}
+  .spin{width:30px;height:30px;border:3px solid var(--linha);border-top-color:var(--caramelo);border-radius:50%;animation:gira .8s linear infinite}
+  @keyframes gira{to{transform:rotate(360deg)}}
+  .pop{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes pop{from{transform:scale(.6);opacity:0}}
+</style>
+</head>
+<body>
+  <img class="logo" src="logo.png" alt="Instituto Dra. Thaís Machado">
+
+  <main class="card">
+    <div id="carregando" class="carregando"><div class="spin"></div></div>
+
+    <section id="form-box" class="oculto">
+      <span class="tag"><i></i>Exclusivo para quem está ao vivo</span>
+      <h1>Sorteio da live de Black Friday</h1>
+      <p class="sub">Coloque seu nome e WhatsApp para concorrer. Só participa quem preencher durante a live.</p>
+
+      <form id="form" novalidate>
+        <div class="campo">
+          <label for="nome">Seu nome completo</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" autocapitalize="words" placeholder="Ex.: Maria da Silva" maxlength="80" required>
+        </div>
+        <div class="campo">
+          <label for="tel">WhatsApp com DDD</label>
+          <input id="tel" name="tel" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(19) 99999-9999" maxlength="15" required>
+        </div>
+        <p class="msg" id="msg" role="alert"></p>
+        <button id="enviar" type="submit">Quero participar</button>
+      </form>
+      <p class="lgpd">Seus dados ficam só com o Instituto e servem apenas para entrarmos em contato com quem for sorteado.</p>
+    </section>
+
+    <section id="ok-box" class="estado oculto">
+      <div class="icone pop">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4a2e24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </div>
+      <h2 id="ok-titulo">Você está concorrendo!</h2>
+      <p id="ok-texto">Agora é só ficar na live até o final. O nome sorteado vai aparecer na tela ao vivo.</p>
+    </section>
+
+    <section id="fechado-box" class="estado oculto">
+      <div class="icone">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#9a5a2a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+      </div>
+      <h2>Inscrições encerradas</h2>
+      <p>O sorteio já está acontecendo ao vivo. Fica de olho nas próximas lives que sempre tem novidade por aqui.</p>
+    </section>
+  </main>
+
+  <p class="rodape">Instituto Dra. Thaís Machado</p>
+
+<script src="config.js"></script>
+<script>
+/* ---- Ponte com o Google Apps Script (com modo demonstração fora dele) ---- */
+var REAL = typeof API_URL === 'string' && /^https:\/\/script\.google\.com\//.test(API_URL);
+function chamar(fn){
+  var args = Array.prototype.slice.call(arguments,1);
+  if (!REAL) return Demo[fn].apply(null,args);
+  return fetch(API_URL,{method:'POST',body:JSON.stringify({fn:fn,args:args})})
+    .then(function(r){return r.json()})
+    .then(function(d){ if(d && d.__erro) throw new Error(d.__erro); return d; });
+}
+var Demo = (function(){
+  var K='sorteio_demo';
+  function ler(){try{return JSON.parse(localStorage.getItem(K))||{aberto:true,lista:[]}}catch(e){return Demo._m||(Demo._m={aberto:true,lista:[]})}}
+  function salvar(d){try{localStorage.setItem(K,JSON.stringify(d))}catch(e){Demo._m=d}}
+  return {
+    status:function(){return Promise.resolve({aberto:ler().aberto})},
+    inscrever:function(nome,tel){
+      var d=ler(); tel=String(tel).replace(/\D/g,'');
+      if(!d.aberto) return Promise.resolve({ok:false,fechado:true,erro:'As inscrições já foram encerradas.'});
+      if(d.lista.some(function(x){return x.tel===tel})) return Promise.resolve({ok:true,repetido:true});
+      d.lista.push({nome:nome.trim(),tel:tel,ganhou:false}); salvar(d);
+      return new Promise(function(r){setTimeout(function(){r({ok:true})},600)});
+    }
+  };
+})();
+
+/* ---- Tela ---- */
+var $ = function(id){return document.getElementById(id)};
+function mostrar(id){['carregando','form-box','ok-box','fechado-box'].forEach(function(s){$(s).classList.toggle('oculto',s!==id)})}
+
+var tel = $('tel');
+tel.addEventListener('input',function(){
+  var d = tel.value.replace(/\D/g,'').slice(0,11), f = d;
+  if (d.length > 2) f = '(' + d.slice(0,2) + ') ' + d.slice(2);
+  if (d.length > 6) f = '(' + d.slice(0,2) + ') ' + (d.length===11 ? d.slice(2,7)+'-'+d.slice(7) : d.slice(2,6)+'-'+d.slice(6));
+  tel.value = f; tel.classList.remove('invalido');
+});
+$('nome').addEventListener('input',function(){this.classList.remove('invalido')});
+
+$('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var nome = $('nome').value.replace(/\s+/g,' ').trim();
+  var num = tel.value.replace(/\D/g,'');
+  $('msg').textContent='';
+  if (nome.length < 3){ $('nome').classList.add('invalido'); $('msg').textContent='Digite seu nome completo.'; $('nome').focus(); return; }
+  if (num.length < 10){ tel.classList.add('invalido'); $('msg').textContent='Confira o WhatsApp com DDD.'; tel.focus(); return; }
+  var b = $('enviar'); b.disabled = true; b.textContent = 'Enviando...';
+  chamar('inscrever', nome, num).then(function(r){
+    if (r.ok){
+      if (r.repetido){ $('ok-titulo').textContent='Você já está participando!'; $('ok-texto').textContent='Esse WhatsApp já foi cadastrado. Agora é só ficar na live até o final.'; }
+      mostrar('ok-box');
+    } else if (r.fechado){ mostrar('fechado-box'); }
+    else { $('msg').textContent = r.erro || 'Não deu certo. Tenta de novo.'; }
+  }).catch(function(){
+    $('msg').textContent = 'A conexão falhou. Toca no botão de novo.';
+  }).then(function(){ b.disabled=false; b.textContent='Quero participar'; });
+});
+
+chamar('status').then(function(s){ mostrar(s.aberto ? 'form-box' : 'fechado-box'); })
+  .catch(function(){ mostrar('form-box'); });
+</script>
+</body>
+</html>
